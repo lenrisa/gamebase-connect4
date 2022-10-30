@@ -23,8 +23,8 @@ Each of the possible moves on the current board has a different score dependent 
 
 This scoring system values can be changed to adjust the behaviour of the AI. 
 
-The AI chooses the best move using on the scoring system and minMax algorithm 
-with additional insight according to the game difficulty as follows:
+The AI chooses the best move using the scoring system and the minMax algorithm 
+with additional settings according to the game difficulty as follows:
 * In easy-mode - doesn't take the opponent's moves into account
 * In medium-mode - takes the next opponent's move into account
 * In hard-mode - takes next 4 moves in the game into account

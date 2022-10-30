@@ -51,7 +51,7 @@ case class GameState(
       ).toMap
   }
 
-  def moveDown() : GameState = {
+  def dropDown() : GameState = {
     this.copy(player = this.getFinalPlace(this.currentBoard, this.player))
   }
 
@@ -203,7 +203,6 @@ case class GameState(
     val tempBoard = this.currentBoard.updated(p.y, this.currentBoard(p.y).updated(p.x, this.playerColor))
     this.copy(player = p, currentBoard = tempBoard)
   }
-
 }
 
 class GameLogic(val gridDims: Dimensions,
@@ -236,7 +235,7 @@ class GameLogic(val gridDims: Dimensions,
   def drop(): Unit = {
     if (!currGameState.isColumnFull(currGameState.player.x, currGameState.currentBoard)
       & !currGameState.isGameOver) {
-      currGameState = currGameState.moveDown()
+      currGameState = currGameState.dropDown()
       currGameState = currGameState.addPieceToBoard()
       currGameState = currGameState.updateBoardAndSpawnPiece()
 

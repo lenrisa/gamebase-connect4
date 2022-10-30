@@ -60,9 +60,6 @@ class GameBase   extends PApplet {
   def drawRoundedRectangle(r: Rectangle): Unit =
     rect(r.left, r.top, r.width, r.height, 30)
 
-  def drawTriangle(t: Triangle): Unit =
-    triangle(t.p1.x, t.p1.y, t.p2.x,t.p2.y, t.p3.x,t.p3.y)
-
   def drawEllipse(r: Rectangle): Unit =
     ellipse(r.center.x, r.center.y, r.width, r.height)
 
