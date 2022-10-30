@@ -5,7 +5,6 @@ import engine.graphics.{Color, Point, Rectangle}
 import connectFour.logic.GameLogic
 import engine.graphics.Color._
 import processing.event.{KeyEvent, MouseEvent}
-
 import java.awt.event
 import java.awt.event.KeyEvent._
 import processing.core.{PApplet, PConstants, PImage}
@@ -13,6 +12,7 @@ import processing.core.{PApplet, PConstants, PImage}
 
 
 class ConnectFourGame extends GameBase {
+  //resources globals
   var menuBackground: PImage = createImage(0, 0, 0)
   var emptyCell : PImage = createImage(0, 0, 0)
   var purplePiece : PImage = createImage(0, 0, 0)
@@ -30,7 +30,7 @@ class ConnectFourGame extends GameBase {
   val mediumButton : Rectangle = Rectangle(Point(350,400), 200, heightInPixels.toFloat / 6)
   val hardButton : Rectangle = Rectangle(Point(650,400), 200, heightInPixels.toFloat / 6)
 
-  // this function is wrongly named draw by processing (is called on each update next to drawing)
+
   override def draw(): Unit = {
     if (!gameLogic.isGameRunning & !gameLogic.isDifficultyScreen) drawMenu()
     else if (!gameLogic.isGameRunning & gameLogic.isDifficultyScreen) drawDifficultyScreen()
@@ -219,28 +219,23 @@ class ConnectFourGame extends GameBase {
     }
   }
 
-
   override def settings(): Unit = {
     pixelDensity(displayDensity())
-    // If line below gives errors try size(widthInPixels, heightInPixels, PConstants.P2D)
     size(widthInPixels, heightInPixels)
     keyRepeatEnabled = true
   }
 
   override def setup(): Unit = {
     text("", 0, 0)
-    menuBackground = loadImage("sprites/background.png", "png")
-    emptyCell = loadImage("sprites/empty.png", "png")
-    purplePiece = loadImage("sprites/purplePiece.png", "png")
-    yellowPiece = loadImage("sprites/yellowPiece.png", "png")
-    purpleGhost = loadImage("sprites/purpleGhost.png", "png")
-    yellowGhost = loadImage("sprites/yellowGhost.png", "png")
-
-    //backgroundImage.resize(widthInPixels, heightInPixels)
+    menuBackground = loadImage("resources/background.png", "png")
+    emptyCell = loadImage("resources/empty.png", "png")
+    purplePiece = loadImage("resources/purplePiece.png", "png")
+    yellowPiece = loadImage("resources/yellowPiece.png", "png")
+    purpleGhost = loadImage("resources/purpleGhost.png", "png")
+    yellowGhost = loadImage("resources/yellowGhost.png", "png")
   }
 
 }
-
 
 object ConnectFourGame {
 

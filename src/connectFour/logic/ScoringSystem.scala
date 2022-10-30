@@ -58,6 +58,15 @@ object ScoringSystem {
       }
     }
 
+    //Diagonal / scoring
+    for (r <- 0 until gridDims.width - 3) {
+      for (c <- 0 until gridDims.height - 3) {
+        var moveOutcome: Seq[CellType] = Seq()
+        for (i <- 0 until 4) moveOutcome = moveOutcome :+ board(c + i)(r + 3 - i)
+        score += calculateMoveScore(moveOutcome, player)
+      }
+    }
+
     score
   }
 }

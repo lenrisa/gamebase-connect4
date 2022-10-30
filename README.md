@@ -19,7 +19,7 @@ Each of the possible moves on the current board has a different score dependent 
 * +3 for each of the pieces of the same color placed in the middle column
 * +5 for each 3-in-a-row 
 * +2 for each 2-in-a-row 
-* -3 for each opponent 3-in-a-row
+* -4 for each opponent 3-in-a-row
 
 This scoring system values can be changed to adjust the behaviour of the AI. 
 

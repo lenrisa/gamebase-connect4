@@ -173,7 +173,7 @@ case class GameState(
       for (col <- allowedMoves) {
           val finalPlace = getFinalPlace(board, Point(col, 0))
           val tempBoard = board.updated(finalPlace.y, board(finalPlace.y).updated(finalPlace.x, PlayerB()))
-          val newScore = minMax(tempBoard, difficulty - 1, false)._2
+          val newScore = minMax(tempBoard, difficulty - 1, AITurn = false)._2
           if (newScore > bestScore) {
             bestScore = newScore
             bestColumn = col
@@ -186,7 +186,7 @@ case class GameState(
       for (col <- allowedMoves) {
           val finalPlace = getFinalPlace(board, Point(col, 0))
           val tempBoard = board.updated(finalPlace.y, board(finalPlace.y).updated(finalPlace.x, PlayerA()))
-          val newScore = minMax(tempBoard, difficulty - 1, true)._2
+          val newScore = minMax(tempBoard, difficulty - 1, AITurn= true)._2
           if (newScore < bestScore) {
             bestScore = newScore
             bestColumn = col
@@ -214,7 +214,8 @@ class GameLogic(val gridDims: Dimensions,
                 val difficulty : Int,
                 val isGameRunning: Boolean) {
 
-  var currGameState: GameState = GameState(gridDims, initialBoard, randomGen, singleplayer, isDifficultyScreen, difficulty)
+  var currGameState: GameState = GameState(gridDims, initialBoard, randomGen, singleplayer,
+    isDifficultyScreen, difficulty)
 
   def gameOver: Boolean = currGameState.isGameOver
 
