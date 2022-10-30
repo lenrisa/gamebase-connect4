@@ -1,9 +1,8 @@
 package connectFour.logic
 
 import connectFour.game.{CellType, Empty, PlayerA, PlayerB, TopRow}
+import connectFour.logic.ScoringSystem.getMoveScore
 import engine.random.{RandomGenerator, ScalaRandomGen}
-import scala.util.control.Breaks._
-import scala.collection.mutable
 
 case class GameState(
                       gridDims : Dimensions,
@@ -78,7 +77,7 @@ case class GameState(
   }
 
   def checkGameOver(board: Seq[Seq[CellType]]): Boolean = {
-    this.checkWinner(board, PlayerA()) | this.checkWinner(board, PlayerB()) | this.fullBoard(board)
+    this.checkForWinner(board, PlayerA()) | this.checkForWinner(board, PlayerB()) | this.fullBoard(board)
   }
 
   def updateBoardAndSpawnPiece(): GameState = {
@@ -96,7 +95,7 @@ case class GameState(
 
   def getWinner() : Int = {
     var currWinner = -1
-    if (this.checkWinner(this.currentBoard, this.playerColor)) {
+    if (this.checkForWinner(this.currentBoard, this.playerColor)) {
       if (this.playerColor == PlayerA()) currWinner = 0
       if (this.playerColor == PlayerB()) currWinner = 1
     }
@@ -113,7 +112,7 @@ case class GameState(
     else false
   }
 
-  def checkWinner(board : Seq[Seq[CellType]], player : CellType) : Boolean = {
+  def checkForWinner(board : Seq[Seq[CellType]], player : CellType) : Boolean = {
     var won = false
 
     //horizontal wins
@@ -151,68 +150,6 @@ case class GameState(
     won
   }
 
-
-  def calculateMoveScore(move : Seq[CellType], player : CellType) : Int = {
-    var score = 0
-    val pieceCount = move.count(p => p == player)
-    val emptyCount = move.count(p => p == Empty())
-
-    if (pieceCount == 4) score += 100 //winning move
-    else if (pieceCount == 3 & emptyCount == 1) score += 5 //3 in a row
-    else if (pieceCount == 2 & emptyCount == 2) score += 2 //2 in a row
-
-    if (move.count(p => p == player.opposite) == 3 & emptyCount == 1) score -= 4 //opponent 3 in a row move
-
-    score
-  }
-
-  def getMoveScore(board: Seq[Seq[CellType]], player : CellType): Int = {
-    var score = 0
-
-    //Middle column
-    val centerColumn = board.map{_(3)}
-    val centerPieceCount = centerColumn.count(p => p == player)
-    score += centerPieceCount * 3
-
-
-    //Horizontal scoring
-    for (r <- 0 until gridDims.width){
-      val row = board(r)
-      for (c <- 0 until gridDims.height - 3){
-        val moveOutcome = row.slice(c, c + 4)
-        score += calculateMoveScore(moveOutcome, player)
-      }
-    }
-
-    // Vertical scoring
-    for (c <- 0 until gridDims.height){
-      val column = board.map{_(c)}
-      for (r <- 0 until gridDims.width - 3) {
-        val moveOutcome = column.slice(r, r + 4)
-        score += calculateMoveScore(moveOutcome, player)
-      }
-    }
-
-    //Diagonal \ scoring
-    for (r <- 0 until gridDims.width - 3) {
-      for (c <- 0 until gridDims.height - 3) {
-        var moveOutcome : Seq[CellType] = Seq()
-        for (i <- 0 until 4) moveOutcome = moveOutcome :+ board(c + i)(r + i)
-        score += calculateMoveScore(moveOutcome, player)
-      }
-    }
-
-    //Diagonal / scoring
-    for (r <- 0 until gridDims.width - 3) {
-      for (c <- 0 until gridDims.height - 3) {
-        var moveOutcome: Seq[CellType] = Seq()
-        for (i <- 0 until 4) moveOutcome = moveOutcome :+ board(c + i)(r + 3 - i)
-        score += calculateMoveScore(moveOutcome, player)
-      }
-    }
-    score
-  }
-
   def getAllowedMoves(board : Seq[Seq[CellType]]) : Seq[Int] = {
     var allowedMoves : Seq[Int] = Seq()
     for (col <- 0 until gridDims.height) {
@@ -224,11 +161,12 @@ case class GameState(
   def minMax(board : Seq[Seq[CellType]], difficulty : Int, AITurn : Boolean) : (Int,Int) = {
     val allowedMoves = getAllowedMoves(board)
     if (this.checkGameOver(board) | difficulty == 0) {
-        if (checkWinner(board, PlayerB())) return (-1, 10000)
-        else if (checkWinner(board, PlayerA())) return (-1, -10000)
+        if (checkForWinner(board, PlayerB())) return (-1, 10000)
+        else if (checkForWinner(board, PlayerA())) return (-1, -10000)
         else if (fullBoard(board)) return (-1, 0)
-        else return (-1, getMoveScore(board, PlayerB()))
+        else return (-1, getMoveScore(board, PlayerB(), gridDims))
       }
+
     if (AITurn) {
       var bestScore = -10000000
       var bestColumn = allowedMoves(randomGen.randomInt(allowedMoves.length))
@@ -310,10 +248,7 @@ class GameLogic(val gridDims: Dimensions,
 }
 
 object GameLogic{
-  val MaxWidth = 50
-  val MaxHeight = 50
-
-  val DefaultWidth: Int = 7
+ val DefaultWidth: Int = 7
   val DefaultHeight: Int = 7
   val DefaultDims: Dimensions = Dimensions(width = DefaultWidth, height = DefaultHeight)
 
