@@ -5,6 +5,7 @@ The goal in the game is to form a line of four pieces in the same color.
 Any line - horizontal, vertical or diagonal guarantees a win. 
 If the board is filled and neither of the players managed to form a line of 4 the game ends in a draw.
 The player can see where their piece will fall in the board. 
+If you move try to move the piece "out of the screen" it will re-appear on the other side.
 Use `arrows` to move and `space` to drop the piece.
 To quit the game press `q`, to restart (go back to menu) press `r`.
 
@@ -30,11 +31,13 @@ with additional settings according to the game difficulty as follows:
 * In hard-mode - takes next 4 moves in the game into account
 
 
-
-
-
 ## How to run
 
 In terminal type `./gradlew run` to start the game or press the play button in `ConnectFourGame` if using IntelliJ IDEA.
+
+## Game showcase
+You can find a .mkv file with the game showcase in the main folder.
+
+You can also access the video via [this](https://video.vu.nl/media/Connect+4+showcase+-+Ewa+Kaleta+2022/1_r289c9fy) link.
 
 
